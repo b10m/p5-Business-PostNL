@@ -1,0 +1,19 @@
+Revision history for Perl module Business::TNTPost::NL
+
+0.06 Dec 24 2008
+    - new rates, updated module
+    - added more pod
+    - using Class::Accessor::Fast
+
+0.04 Feb 15 2008
+    - fixed bug in world :: basic :: europe :: large :: standard
+
+0.03 Jan 09 2008
+    - fixed bug in world :: register :: world
+    - fixed country codes (Greece is back in zone 4)
+
+0.02 Dec 14 2007
+    - new rates, updated module
+
+0.01 Dec 31 2006
+    - original version, originated from the obsolete Business::TPGPost
