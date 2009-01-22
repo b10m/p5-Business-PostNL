@@ -5,7 +5,7 @@ use Business::TNTPost::NL::Data qw/:ALL/;
 use Carp;
 use List::Util qw/reduce/;
 
-our $VERSION = 0.06;
+our $VERSION = 0.08;
 our $ERROR   = undef;
 
 use base qw/Class::Accessor::Fast/;
@@ -195,7 +195,7 @@ sub _generate_path {
         push @p, 'world';    # world
         if ( $self->register ) {
             push @p, 'register',    # w/register
-              ( $self->zone < 3 )   # w/register/(europe|world)
+              ( $self->zone < 4 )   # w/register/(europe|world)
               ? 'europe'
               : 'world',
               ( $self->machine )   # w/register/(e|w)/(stamp|machine)

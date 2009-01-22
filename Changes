@@ -1,5 +1,8 @@
 Revision history for Perl module Business::TNTPost::NL
 
+0.08 Jan 22 2008
+    - Fixed countries considered "Europe"
+
 0.06 Dec 24 2008
     - new rates, updated module
     - added more pod

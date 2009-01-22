@@ -36,4 +36,4 @@ $cost = $tnt->calculate(
                weight  => '666',
                register=> 1
            );
-is($cost, '21.85');
+is($cost, '12.32');
