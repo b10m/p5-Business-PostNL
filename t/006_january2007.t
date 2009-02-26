@@ -20,7 +20,7 @@ $cost = $tnt->calculate(
                weight  => '1234',
                priority=> 1,
            );
-is($cost, '19.95');
+is($cost, '9.24');
 
 $tnt  = Business::TNTPost::NL->new ();
 $cost = $tnt->calculate(

@@ -5,7 +5,7 @@ use Business::TNTPost::NL::Data qw/:ALL/;
 use Carp;
 use List::Util qw/reduce/;
 
-our $VERSION = 0.08;
+our $VERSION = 0.10;
 our $ERROR   = undef;
 
 use base qw/Class::Accessor::Fast/;
@@ -143,7 +143,7 @@ sub calculate {
     $self->priority(1) if ( $self->tracktrace );
 
     # Zone 3,4 + small automagically means 'priority'
-    $self->priority(1) if( $self->zone > 2 && !$self->large );
+    $self->priority(1) if( $self->zone > 3 && !$self->large );
 
     # Registered (aangetekend) automagically means 'priority'
     #$self->priority(1) if ( $self->register );
@@ -207,7 +207,7 @@ sub _generate_path {
         }
         else {
             push @p, 'basic',           # w/basic
-              ( $self->zone < 3 )       # w/basic/(europe|world)
+              ( $self->zone < 4 )       # w/basic/(europe|world)
               ? 'europe'
               : 'world',
               ( $self->large )		# w/basic/(e|w)/(large|small)
