@@ -16,7 +16,7 @@ my $regcost = $tnt->calculate(
            machine       => 1,
          );
 
-is($regcost, '7.47');
+is($regcost, '9.22');
 
 $regcost = $tnt->calculate(
            country       => 'ID',
@@ -26,4 +26,4 @@ $regcost = $tnt->calculate(
            large         => 0,
            machine       => 0,
          );
-is($regcost, '10.45');
+is($regcost, '16.00');

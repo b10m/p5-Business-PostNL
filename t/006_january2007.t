@@ -12,7 +12,7 @@ my $cost = $tnt->calculate(
                register=> 1,
                machine => 1
            );
-is($cost, '6.80');
+is($cost, '7.47');
 
 $tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
@@ -20,7 +20,7 @@ $cost = $tnt->calculate(
                weight  => '1234',
                priority=> 1,
            );
-is($cost, '9.24');
+is($cost, '9.00');
 
 $tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
@@ -28,7 +28,7 @@ $cost = $tnt->calculate(
                weight  => '3513',
                large   => 1,
            );
-is($cost, '34.20');
+is($cost, '34.30');
 
 $tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
@@ -36,4 +36,4 @@ $cost = $tnt->calculate(
                weight  => '666',
                register=> 1
            );
-is($cost, '12.32');
+is($cost, '9.50');

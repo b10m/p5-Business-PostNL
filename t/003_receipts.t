@@ -1,6 +1,6 @@
 # -*- perl -*-
 
-use Test::More tests => 2;
+use Test::More skip_all => 'The receipt option is no longer valid';
 
 use Business::PostNL;
 

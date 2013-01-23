@@ -1,6 +1,6 @@
 # -*- perl -*-
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use Business::PostNL;
 
@@ -10,23 +10,41 @@ my $cost = $tpg->calculate(
                weight  => '345',
                register=> 1
            );
-is($cost, '7.70');
+is($cost, '9.50');
 
 $tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(
                country => 'NL',
                weight  => '11337',
                priority=> 1,
-               large   => 1 
+               large   => 1
            );
+is($cost, '12.40');
+
+$tpg  = Business::PostNL->new ();
+$cost = $tpg->calculate(
+               country => 'NL',
+               weight  => '31337',
+               priority=> 1,
+               large   => 1
+           );
+
 is($cost, undef);
-is($Business::PostNL::ERROR, '1337 grams too heavy (max: 10000 gr.)');
+is($Business::PostNL::ERROR, '1337 grams too heavy (max: 30000 gr.)');
 
 $tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(
                country => 'NL',
                weight  => '1337',
+               large   => 1
+           );
+is($cost, undef);
+
+$tpg  = Business::PostNL->new ();
+$cost = $tpg->calculate(
+               country => 'NL',
+               weight  => '2337',
                priority=> 1,
-               large   => 1 
+               large   => 1
            );
 is($cost, '6.75');

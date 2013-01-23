@@ -10,7 +10,7 @@ my $cost = $tnt->calculate(
                weight  => '1234',
                priority=> 1
            );
-is($cost, '9.24');
+is($cost, '9.00');
 
 $tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
@@ -18,9 +18,9 @@ $cost = $tnt->calculate(
                weight  => '234',
                priority=> 0,
                register=> 1,
-               machine => 1 
+               machine => 1
            );
-is($cost, '6.80');
+is($cost, '7.47');
 
 $tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
@@ -28,9 +28,9 @@ $cost = $tnt->calculate(
                weight  => '666',
                priority=> 1,
                register=> 0,
-               machine => 0 
+               machine => 0
            );
-is($cost, '19.95');
+is($cost, '12.35');
 
 $tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
@@ -38,7 +38,7 @@ $cost = $tnt->calculate(
                weight  => '6666',
                priority=> 1,
                register=> 1,
-               machine => 0 
+               machine => 0
            );
 is($cost, undef);
 is($Business::PostNL::ERROR, '4666 grams too heavy (max: 2000 gr.)');
