@@ -5,7 +5,7 @@ use Business::PostNL::Data qw/:ALL/;
 use Carp;
 use List::Util qw/reduce/;
 
-our $VERSION = 0.10;
+our $VERSION = 0.12;
 our $ERROR   = undef;
 
 use base qw/Class::Accessor::Fast/;
@@ -20,7 +20,7 @@ BEGIN {
 
 =head1 NAME
 
-Business::PostNL - Calculate Dutch (TNT Post) shipping costs
+Business::PostNL - Calculate Dutch (PostNL) shipping costs
 
 =head1 SYNOPSIS
 
@@ -30,13 +30,11 @@ Business::PostNL - Calculate Dutch (TNT Post) shipping costs
      $tnt->country('DE');
      $tnt->weight('534');
      $tnt->large(1);
-     $tnt->priority(1);
      $tnt->tracktrace(1);
      $tnt->register(1);
-     $tnt->receipt(1);
 
   my $costs = $tnt->calculate or die $Business::PostNL::ERROR;
-  
+
 
 or
 
@@ -44,20 +42,19 @@ or
 
   my $tnt = Business::PostNL->new();
   my $costs = $tnt->calculate(
-                  country    =>'DE', 
-                  weight     => 534, 
-                  large      => 1, 
+                  country    =>'DE',
+                  weight     => 534,
+                  large      => 1,
                   tracktrace => 1,
                   register   => 1,
-                  receipt    => 1
               ) or die $Business::PostNL::ERROR;
 
 =head1 DESCRIPTION
 
-This module calculates the shipping costs for the Dutch TNT Post,
-based on country, weight and priority shipping (or not), etc.
+This module calculates the shipping costs for the Dutch PostNL,
+based on country, and weight etc.
 
-The shipping cost information is based on 'Tarieven Januari 2009'.
+The shipping cost information is based on 'Posttarieven 2013'.
 
 It returns the shipping costs in euro or undef (which usually means
 the parcel is heavier than the maximum allowed weight; check
@@ -84,7 +81,7 @@ sub new {
 =head3 country
 
 Sets the country (ISO 3166, 2-letter country code) and returns the
-zone number used by TNT Post (or 0 for The Netherlands (NL)).
+zone number used by PostNL (or 0 for The Netherlands (NL)).
 
 This value is mandatory for the calculations.
 
@@ -125,11 +122,7 @@ sub calculate {
     my ( $self, %opt ) = @_;
 
     # Set the options
-    for (
-        qw/country weight large priority tracktrace
-        register receipt machine/
-      )
-    {
+    for ( qw/country weight large tracktrace register machine/) {
         $self->$_( $opt{$_} ) if ( defined $opt{$_} );
     }
 
@@ -138,15 +131,6 @@ sub calculate {
 
     # > 2000 grams automatically means 'tracktrace'
     $self->tracktrace(1) if ( $self->weight > 2000 );
-
-    # Zone 1..4 (with tracktrace) automagically means 'priority'
-    $self->priority(1) if ( $self->tracktrace );
-
-    # Zone 3,4 + small automagically means 'priority'
-    $self->priority(1) if( $self->zone > 3 && !$self->large );
-
-    # Registered (aangetekend) automagically means 'priority'
-    #$self->priority(1) if ( $self->register );
 
     # Fetch the interesting table
     my $ref = _pointer_to_element( table(), $self->_generate_path );
@@ -163,16 +147,6 @@ sub calculate {
     }
     $ERROR = $self->weight - $highest . " grams too heavy (max: $highest gr.)"
       if ( $highest < $self->weight );
-
-    ### Receipt ("Bericht van ontvangst")
-    if ( $self->register && $self->receipt ) {
-        if ( $self->zone ) {    # World
-            $self->cost( $self->cost + 1.40 );
-        }
-        else {                  # Netherlands
-            $self->cost( $self->cost + 1.15 );
-        }
-    }
 
     return ( $self->cost ) ? sprintf( "%0.2f", $self->cost ) : undef;
 }
@@ -192,53 +166,57 @@ sub _generate_path {
     my @p;
 
     if ( $self->zone ) {
-        push @p, 'world';    # world
-        if ( $self->register ) {
-            push @p, 'register',    # w/register
-              ( $self->zone < 4 )   # w/register/(europe|world)
-              ? 'europe'
-              : 'world',
-              ( $self->machine )   # w/register/(e|w)/(stamp|machine)
-                  ? 'machine'
-                  : 'stamp';
-        }
-        elsif ( $self->tracktrace ) {
-            push @p, 'plus', 'zone', $self->zone;    # w/plus/zone/[1..4]
-        }
-        else {
-            push @p, 'basic',           # w/basic
-              ( $self->zone < 4 )       # w/basic/(europe|world)
-              ? 'europe'
-              : 'world',
-              ( $self->large )		# w/basic/(e|w)/(large|small)
-              ? 'large'
-              : 'small';
+        push @p, 'world';           # world
 
-	    if( !$self->large ) {
-		# w/basic/(e|w)/small/(machine|stamp)
-                push @p, ( $self->machine ) ? 'machine' : 'stamp';
-            }
+        if( $self->large ) {
+            push @p, 'large',       # w/large
+                     'zone',        # w/large/zone
+                     $self->zone;   # w/large/zone/[1..4]
+            push @p,
+                ( $self->machine )
+                ? 'machine'         # w/large/zone/[1..4]/machine
+                : 'stamp';          # w/large/zone/[1..4]/stamp
 
             push @p,
-              ( $self->priority )       # w/basic/(e|w)/(l|s)/(m|s)?/(p|s)
-              ? 'priority'
-              : 'standard';
+                ( $self->register )
+                ? 'register'        # w/large/zone/[1..4]/(m|s)/register
+                : ( $self->tracktrace )
+                  ? 'tracktrace'    # w/large/zone/[1..4]/(m|s)/tracktrace
+                  : 'normal';       # w/large/zone/[1..4]/(m|s)/normal
+
+        }
+        else {
+            push @p, 'small';       # w/small
+            push @p,
+                ( $self->zone < 4 )
+                ? 'europe'          # w/small/europe
+                : 'world';          # w/small/world
+            push @p,
+                ( $self->machine )
+                ? 'machine'         # w/small/(e|w)/machine
+                : 'stamp';          # w/small/(e|w)/stamp
+            push @p,
+                ( $self->register )
+                ? 'register'        # w/small/(e|w)/(m|s)/register
+                : 'normal';         # w/small/(e|w)/(m|s)/normal
         }
     }
     else {
         push @p, 'netherlands';                 # netherlands
         if ( $self->register ) {
-            push @p, 'register';		# n/register
+            push @p, 'register';                # n/register
         }
         else {
             push @p, ( $self->large )           # n/(large|small)
               ? 'large'
               : 'small';
         }
-        ( push @p, ( $self->machine ) ? 'machine' : 'stamp' ) 
-            unless $self->large;;
+        push @p,
+            ( $self->machine )
+            ? 'machine'                         # n/(r|l|s)/machine
+            : 'stamp';                          # n/(r|l|s)/stamp
     }
-#print (join " :: ", @p), "\n";
+    #print (join " :: ", @p), "\n";
     return @p;
 }
 
@@ -271,10 +249,12 @@ This value is mandatory for the calculations.
 Sets and/or returns the value of this option. Defaults to undef (meaning:
 the package will fit through the mail slot).
 
-=head3 priority
+=head3 priority [DEPRECATED]
 
-Sets and/or returns the value of this option. Defaults to undef (meaning:
-standard class (or economy class, where standard is not available)).
+PostNL still requires you to put a priority sticker on your letters and
+parcels, but this seems to be solely for speed of delivery. I couldn't
+find any price difference, hence this setting is ignored from now on and
+only here for backwards compatability.
 
 =head3 tracktrace
 
@@ -288,10 +268,10 @@ optional anymore.
 Sets and/or returns the value of this options. Defaults to undef (meaning:
 parcel is not registered (Dutch: aangetekend)).
 
-=head3 receipt
+=head3 receipt [DEPRECATED]
 
-Sets and/or returns the value of this options. Defaults to undef (meaning:
-receipt not requested for registered parcels).
+No longer an option, solely here for backwards compatibility.
+
 
 =head3 machine
 
@@ -303,87 +283,19 @@ and "Easystamp" should also use this option.
 
 =head1 BUGS
 
-Please do report bugs/patches to 
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=Business-TNTPost-NL>
+Please do report bugs/patches to
+L<http://rt.cpan.org/Public/Dist/Display.html?Name=Business-PostNL>
 
 =head1 CAVEAT
 
-The Dutch postal agency (TNT Post) uses many, many, many various ways
+The Dutch postal agency (PostNL) uses many, many, many various ways
 for you to ship your parcels. Some of them are included in this module,
 but a lot of them not (maybe in the future? Feel free to patch ;-)
 
-This module handles the following shipping ways (page numbers refer to the 
-TNT Post booklet (sorry, all in Dutch)):
-
-=head2 Nederland
-
-=head3 Brievenbuspost
-
-=over 4
-
-=item Brieven, Direct Mail, kaarten, buspakjes en briefkaarten
-
-Pagina 19
-
-=item Aangetekend
-
-Pagina 25, incl. toeslag handtekening retour
-
-=back
-
-=head3 Paketten
-
-=over 4
-
-=item Basis Pakket
-
-Pagina 26
-
-=back
-
-=head2 Buitenland
-
-=head3 Brievenbuspost
-
-=over 4
-
-=item Brieven, Direct Mail, kaarten, buspakjes
-
-Pagina 31
-
-=back
-
-=head3 Pakketten
-
-=over 4
-
-=item Internationaal Pakket Basis
-
-Pagina 35
-
-=item Internationaal Pakket Plus
-
-Pagina 36
-
-=back
-
-=head3 Extra Zeker
-
-=over 4
-
-=item Aangetekend incl. toeslag handtekening retour 
-
-Pagina 32
-
-=back
-
-These should be the most commom methods of shipment.
-
 =head1 AUTHOR
 
-Menno Blom, 
-E<lt>blom@cpan.orgE<gt>, 
-L<http://menno.b10m.net/perl/>
+Menno Blom,
+E<lt>blom@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
@@ -395,8 +307,8 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-L<http://www.tntpost.nl/>, 
-L<http://www.tntpost.nl/zakelijk/images/Tarievenboekje_tcm42-411440.pdf>,
+L<http://www.postnl.nl/>,
+L<http://www.postnl.nl/voorthuis/images/PostNL-Tarievenmap-2013_tcm213-513266.pdf>,
 L<http://www.iso.org/iso/en/prods-services/iso3166ma/index.html>
 
 =cut
