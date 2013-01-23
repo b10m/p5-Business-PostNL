@@ -1,4 +1,4 @@
-package Business::TNTPost::NL::Data;
+package Business::PostNL::Data;
 use strict;
 use base 'Exporter';
 use vars qw($VERSION @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -15,11 +15,11 @@ $VERSION   = 0.10;
 
 =head1 NAME
 
-Business::TNTPost::NL::Data - Shipping cost data for Business::TNTPost::NL
+Business::PostNL::Data - Shipping cost data for Business::PostNL
 
 =head1 DESCRIPTION
 
-Data module for Business::TNTPost::NL containing shipping cost
+Data module for Business::PostNL containing shipping cost
 information, country zones etc.
 
 Nothing to see here, the show is over, move along please.
@@ -230,7 +230,7 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-L<Business::TNTPost::NL>, 
+L<Business::PostNL>,
 L<http://www.tntpost.nl/>
 
 =cut

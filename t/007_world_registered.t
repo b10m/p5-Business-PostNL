@@ -3,9 +3,9 @@
 
 use Test::More tests => 2;
 
-use Business::TNTPost::NL;
+use Business::PostNL;
 
-my $tnt  = Business::TNTPost::NL->new ();
+my $tnt  = Business::PostNL->new ();
 
 my $regcost = $tnt->calculate(
            country       => 'GR',

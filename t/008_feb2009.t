@@ -2,16 +2,16 @@
 
 use Test::More tests => 2;
 
-use Business::TNTPost::NL;
+use Business::PostNL;
 
-my $tpg1  = Business::TNTPost::NL->new ();
+my $tpg1  = Business::PostNL->new ();
 my $cost1 = $tpg1->calculate(
                country => 'NO',
                weight  => '150',
             );
 is($cost1, '2.96');
 
-my $tpg2  = Business::TNTPost::NL->new ();
+my $tpg2  = Business::PostNL->new ();
 my $cost2 = $tpg2->calculate(
                country => 'NO',
                weight  => '150',

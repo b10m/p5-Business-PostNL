@@ -4,9 +4,9 @@
 
 use Test::More tests => 3;
 
-BEGIN { use_ok( 'Business::TNTPost::NL' ); }
+BEGIN { use_ok( 'Business::PostNL' ); }
 
-my $object = Business::TNTPost::NL->new ();
-isa_ok ($object, 'Business::TNTPost::NL');
+my $object = Business::PostNL->new ();
+isa_ok ($object, 'Business::PostNL');
 
 can_ok($object, qw/cost country large machine priority receipt register tracktrace weight zone/);

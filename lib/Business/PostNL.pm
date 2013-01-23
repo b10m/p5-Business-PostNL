@@ -1,7 +1,7 @@
-package Business::TNTPost::NL;
+package Business::PostNL;
 
 use strict;
-use Business::TNTPost::NL::Data qw/:ALL/;
+use Business::PostNL::Data qw/:ALL/;
 use Carp;
 use List::Util qw/reduce/;
 
@@ -20,13 +20,13 @@ BEGIN {
 
 =head1 NAME
 
-Business::TNTPost::NL - Calculate Dutch (TNT Post) shipping costs
+Business::PostNL - Calculate Dutch (TNT Post) shipping costs
 
 =head1 SYNOPSIS
 
-  use Business::TNTPost::NL;
+  use Business::PostNL;
 
-  my $tnt = Business::TNTPost::NL->new();
+  my $tnt = Business::PostNL->new();
      $tnt->country('DE');
      $tnt->weight('534');
      $tnt->large(1);
@@ -35,14 +35,14 @@ Business::TNTPost::NL - Calculate Dutch (TNT Post) shipping costs
      $tnt->register(1);
      $tnt->receipt(1);
 
-  my $costs = $tnt->calculate or die $Business::TNTPost::NL::ERROR;
+  my $costs = $tnt->calculate or die $Business::PostNL::ERROR;
   
 
 or
 
-  use Business::TNTPost::NL;
+  use Business::PostNL;
 
-  my $tnt = Business::TNTPost::NL->new();
+  my $tnt = Business::PostNL->new();
   my $costs = $tnt->calculate(
                   country    =>'DE', 
                   weight     => 534, 
@@ -50,7 +50,7 @@ or
                   tracktrace => 1,
                   register   => 1,
                   receipt    => 1
-              ) or die $Business::TNTPost::NL::ERROR;
+              ) or die $Business::PostNL::ERROR;
 
 =head1 DESCRIPTION
 
@@ -61,7 +61,7 @@ The shipping cost information is based on 'Tarieven Januari 2009'.
 
 It returns the shipping costs in euro or undef (which usually means
 the parcel is heavier than the maximum allowed weight; check
-C<$Business::TNTPost::NL::ERROR>).
+C<$Business::PostNL::ERROR>).
 
 =head2 METHODS
 
@@ -69,7 +69,7 @@ The following methods can be used
 
 =head3 new
 
-C<new> creates a new C<Business::TNTPost::NL> object. No more, no less.
+C<new> creates a new C<Business::PostNL> object. No more, no less.
 
 =cut
 
@@ -98,7 +98,7 @@ sub country {
     my ( $self, $cc ) = @_;
 
     if ($cc) {
-        my $zones = Business::TNTPost::NL::Data::zones();
+        my $zones = Business::PostNL::Data::zones();
         $self->zone( defined $zones->{$cc} ? $zones->{$cc} : '4' );
     }
 
@@ -116,7 +116,7 @@ methods above). These options can also be passed straight in to this method
 Two settings are mandatory: country and weight. The rest are given a
 default value that will be used unless told otherwise.
 
-Returns the shipping costs in euro, or undef (see $Business::TNTPost::NL::ERROR
+Returns the shipping costs in euro, or undef (see $Business::PostNL::ERROR
 in that case).
 
 =cut

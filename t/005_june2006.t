@@ -2,9 +2,9 @@
 
 use Test::More tests => 4;
 
-use Business::TNTPost::NL;
+use Business::PostNL;
 
-my $tpg  = Business::TNTPost::NL->new ();
+my $tpg  = Business::PostNL->new ();
 my $cost = $tpg->calculate(
                country => 'PL',
                weight  => '345',
@@ -12,7 +12,7 @@ my $cost = $tpg->calculate(
            );
 is($cost, '7.70');
 
-$tpg  = Business::TNTPost::NL->new ();
+$tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(
                country => 'NL',
                weight  => '11337',
@@ -20,9 +20,9 @@ $cost = $tpg->calculate(
                large   => 1 
            );
 is($cost, undef);
-is($Business::TNTPost::NL::ERROR, '1337 grams too heavy (max: 10000 gr.)');
+is($Business::PostNL::ERROR, '1337 grams too heavy (max: 10000 gr.)');
 
-$tpg  = Business::TNTPost::NL->new ();
+$tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(
                country => 'NL',
                weight  => '1337',

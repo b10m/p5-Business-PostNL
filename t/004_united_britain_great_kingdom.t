@@ -2,9 +2,9 @@
 
 use Test::More tests => 2;
 
-use Business::TNTPost::NL;
+use Business::PostNL;
 
-my $tpg  = Business::TNTPost::NL->new ();
+my $tpg  = Business::PostNL->new ();
 my $cost = $tpg->calculate(
                country => 'GB',
                weight  => '250',
@@ -12,7 +12,7 @@ my $cost = $tpg->calculate(
 is($cost, '4.44');
 
 # UK is not the ISO code, so it should take the same value as, say, Japan
-$tpg  = Business::TNTPost::NL->new ();
+$tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(
                country => 'UK',
                weight  => '250',

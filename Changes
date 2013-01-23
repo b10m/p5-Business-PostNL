@@ -1,4 +1,8 @@
-Revision history for Perl module Business::TNTPost::NL
+Revision history for Perl module Business::PostNL
+
+0.11 Jan 23 2013
+    - renamed from Business::TNTPost::NL to Business::PostNL
+      yes, it's amazing how often this company changes names.
 
 0.10 Feb 26 2009
     - Fixed letter rates for RoW1

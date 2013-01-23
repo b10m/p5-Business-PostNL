@@ -2,9 +2,9 @@
 
 use Test::More tests => 5;
 
-use Business::TNTPost::NL;
+use Business::PostNL;
 
-my $tnt  = Business::TNTPost::NL->new ();
+my $tnt  = Business::PostNL->new ();
 my $cost = $tnt->calculate(
                country => 'DE',
                weight  => '1234',
@@ -12,7 +12,7 @@ my $cost = $tnt->calculate(
            );
 is($cost, '9.24');
 
-$tnt  = Business::TNTPost::NL->new ();
+$tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
                country => 'NL',
                weight  => '234',
@@ -22,7 +22,7 @@ $cost = $tnt->calculate(
            );
 is($cost, '6.80');
 
-$tnt  = Business::TNTPost::NL->new ();
+$tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
                country => 'MX',
                weight  => '666',
@@ -32,7 +32,7 @@ $cost = $tnt->calculate(
            );
 is($cost, '19.95');
 
-$tnt  = Business::TNTPost::NL->new ();
+$tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
                country => 'CH',
                weight  => '6666',
@@ -41,4 +41,4 @@ $cost = $tnt->calculate(
                machine => 0 
            );
 is($cost, undef);
-is($Business::TNTPost::NL::ERROR, '4666 grams too heavy (max: 2000 gr.)');
+is($Business::PostNL::ERROR, '4666 grams too heavy (max: 2000 gr.)');

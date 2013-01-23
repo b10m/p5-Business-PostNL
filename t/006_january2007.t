@@ -3,9 +3,9 @@
 
 use Test::More tests => 4;
 
-use Business::TNTPost::NL;
+use Business::PostNL;
 
-my $tnt  = Business::TNTPost::NL->new ();
+my $tnt  = Business::PostNL->new ();
 my $cost = $tnt->calculate(
                country => 'NL',
                weight  => '345',
@@ -14,7 +14,7 @@ my $cost = $tnt->calculate(
            );
 is($cost, '6.80');
 
-$tnt  = Business::TNTPost::NL->new ();
+$tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
                country => 'MK',
                weight  => '1234',
@@ -22,7 +22,7 @@ $cost = $tnt->calculate(
            );
 is($cost, '9.24');
 
-$tnt  = Business::TNTPost::NL->new ();
+$tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
                country => 'US',
                weight  => '3513',
@@ -30,7 +30,7 @@ $cost = $tnt->calculate(
            );
 is($cost, '34.20');
 
-$tnt  = Business::TNTPost::NL->new ();
+$tnt  = Business::PostNL->new ();
 $cost = $tnt->calculate(
                country => 'VA',
                weight  => '666',
