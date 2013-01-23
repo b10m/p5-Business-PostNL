@@ -3,8 +3,8 @@ README
 LICENSE
 Changes
 Makefile.PL
-lib/Business/TNTPost/NL.pm
-lib/Business/TNTPost/NL/Data.pm
+lib/Business/PostNL.pm
+lib/Business/PostNL/Data.pm
 t/000_pod.t
 t/000_pod-coverage.t
 t/001_load.t
