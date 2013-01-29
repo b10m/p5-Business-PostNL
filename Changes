@@ -1,5 +1,8 @@
 Revision history for Perl module Business::PostNL
 
+0.12 Jan 29 2013
+    - bumped the version to make PAUSE happy
+
 0.12 Jan 23 2013
     - renamed from Business::TNTPost::NL to Business::PostNL
       yes, it's amazing how often this company changes names.

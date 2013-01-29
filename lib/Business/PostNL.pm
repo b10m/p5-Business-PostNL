@@ -5,7 +5,7 @@ use Business::PostNL::Data qw/:ALL/;
 use Carp;
 use List::Util qw/reduce/;
 
-our $VERSION = 0.12;
+our $VERSION = 0.13;
 our $ERROR   = undef;
 
 use base qw/Class::Accessor::Fast/;

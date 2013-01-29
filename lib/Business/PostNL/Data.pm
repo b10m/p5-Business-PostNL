@@ -6,7 +6,7 @@ use vars qw($VERSION @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use Carp;
 use YAML;
 
-$VERSION   = 0.12;
+$VERSION   = 0.13;
 @EXPORT    = qw();
 @EXPORT_OK = qw(zones table);
 %EXPORT_TAGS = ("ALL" => [@EXPORT_OK]);
