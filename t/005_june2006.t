@@ -10,7 +10,7 @@ my $cost = $tpg->calculate(
                weight  => '345',
                register=> 1
            );
-is($cost, '9.50');
+is($cost, '11.00');
 
 $tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(
@@ -19,7 +19,7 @@ $cost = $tpg->calculate(
                priority=> 1,
                large   => 1
            );
-is($cost, '12.40');
+is($cost, '12.90');
 
 $tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(
@@ -38,7 +38,7 @@ $cost = $tpg->calculate(
                weight  => '1337',
                large   => 1
            );
-is($cost, undef);
+is($cost, '6.75');
 
 $tpg  = Business::PostNL->new ();
 $cost = $tpg->calculate(

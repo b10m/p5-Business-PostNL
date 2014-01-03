@@ -1,6 +1,9 @@
 Revision history for Perl module Business::PostNL
 
-0.12 Jan 29 2013
+0.14 Jan 03 2014
+    - Updated rates
+
+0.13 Jan 29 2013
     - bumped the version to make PAUSE happy
 
 0.12 Jan 23 2013

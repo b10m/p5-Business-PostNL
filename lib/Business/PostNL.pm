@@ -5,7 +5,7 @@ use Business::PostNL::Data qw/:ALL/;
 use Carp;
 use List::Util qw/reduce/;
 
-our $VERSION = 0.13;
+our $VERSION = 0.14;
 our $ERROR   = undef;
 
 use base qw/Class::Accessor::Fast/;
@@ -54,7 +54,8 @@ or
 This module calculates the shipping costs for the Dutch PostNL,
 based on country, and weight etc.
 
-The shipping cost information is based on 'Posttarieven 2013'.
+The shipping cost information is based on 'Posttarieven
+Per januari 2014'.
 
 It returns the shipping costs in euro or undef (which usually means
 the parcel is heavier than the maximum allowed weight; check
@@ -272,7 +273,6 @@ parcel is not registered (Dutch: aangetekend)).
 
 No longer an option, solely here for backwards compatibility.
 
-
 =head3 machine
 
 Sets and/or returns the value of this options. Defaults to undef (meaning:
@@ -308,7 +308,7 @@ LICENSE file included with this module.
 =head1 SEE ALSO
 
 L<http://www.postnl.nl/>,
-L<http://www.postnl.nl/voorthuis/images/PostNL-Tarievenmap-2013_tcm213-513266.pdf>,
+L<http://www.postnl.nl/zakelijk/Images/Tarievenkaart-januari-2014-PostNL_tcm210-681029.PDF>,
 L<http://www.iso.org/iso/en/prods-services/iso3166ma/index.html>
 
 =cut
